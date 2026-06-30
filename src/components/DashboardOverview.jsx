@@ -458,7 +458,7 @@ export function DashboardOverview() {
         if (!matchesProduct && !(wantsUnassigned && isUnassigned)) return false
       }
 
-      if (selectedLanguages.length > 0) {
+      if (selectedLanguages.length > 0 && selectedProducts.length === 0) {
         const projectLangCodes = Array.isArray(snap.languages)
           ? snap.languages
               .map((lang) => {
