@@ -115,8 +115,15 @@ export const PRODUCT_GROUPS = [
     key: 'localization',
     label: 'Localization',
     projectNames: [
-      'Design Test Project',
       'EGYM Glossary',
+    ],
+  },
+  {
+    key: 'test',
+    label: 'Test / Demo',
+    excluded: true,
+    projectNames: [
+      'Design Test Project',
       'Figma Demo',
       'One Echo Beta Test',
       'Test',

@@ -252,9 +252,15 @@ function getProgressBgColor(pct) {
   return 'bg-rose-100 text-rose-800 font-semibold';
 }
 
+// Projects belonging to excluded groups (e.g. test/demo) are stripped from all data
+const excludedProjectNames = new Set(
+  PRODUCT_GROUPS.filter((g) => g.excluded).flatMap((g) => g.projectNames),
+)
+
 // projectName → array of product keys it belongs to (built once from config)
 const projectNameToProductKeys = new Map()
 PRODUCT_GROUPS.forEach((group) => {
+  if (group.excluded) return
   group.projectNames.forEach((name) => {
     const existing = projectNameToProductKeys.get(name) ?? []
     existing.push(group.key)
@@ -318,7 +324,9 @@ export function DashboardOverview() {
       })
 
       return uploads.map((upload) => {
-        const uploadSnapshots = snapshotsByUploadId.get(upload.id) ?? []
+        const uploadSnapshots = (snapshotsByUploadId.get(upload.id) ?? []).filter(
+          (s) => !excludedProjectNames.has(s.projectName),
+        )
         const totalProjects = uploadSnapshots.length
 
         const totalBaseWords = uploadSnapshots.reduce(
@@ -384,21 +392,23 @@ export function DashboardOverview() {
       }
     }
 
-    const totalProjects = snapshots.length
-    const sumProgress = snapshots.reduce(
+    const baseSnapshots = snapshots.filter((s) => !excludedProjectNames.has(s.projectName))
+
+    const totalProjects = baseSnapshots.length
+    const sumProgress = baseSnapshots.reduce(
       (acc, item) => acc + (item.progressTotal ?? 0),
       0,
     )
     const averageProgress = totalProjects > 0 ? sumProgress / totalProjects : null
 
-    const totalBaseWords = snapshots.reduce(
+    const totalBaseWords = baseSnapshots.reduce(
       (acc, item) => acc + (item.baseWords ?? 0),
       0,
     )
 
     const rawLanguageCodes = new Set()
     const languageSet = new Set()
-    snapshots.forEach((snap) => {
+    baseSnapshots.forEach((snap) => {
       if (Array.isArray(snap.languages)) {
         snap.languages.forEach((lang) => {
           if (lang?.languageIso) {
@@ -448,7 +458,7 @@ export function DashboardOverview() {
 
     const normalizedSearch = search.trim().toLowerCase()
 
-    const filteredSnapshots = snapshots.filter((snap) => {
+    const filteredSnapshots = baseSnapshots.filter((snap) => {
       if (selectedProducts.length > 0) {
         const projectProducts = projectNameToProductKeys.get(snap.projectName) ?? []
         const isUnassigned = projectProducts.length === 0
@@ -493,7 +503,7 @@ export function DashboardOverview() {
     })
 
     const coverageByLanguage = new Map()
-    snapshots.forEach((snap) => {
+    baseSnapshots.forEach((snap) => {
       const baseWords = Number(snap.baseWords)
       if (!Number.isFinite(baseWords) || baseWords <= 0) {
         return
@@ -517,7 +527,7 @@ export function DashboardOverview() {
         const metric = coverageByLanguage.get(groupKey) ?? {
           groupKey,
           projectsWithLanguage: 0,
-          totalProjects: snapshots.length,
+          totalProjects: baseSnapshots.length,
           totalBaseWords: 0,
           translatedBaseWords: 0,
         }
