@@ -280,9 +280,12 @@ export function DashboardOverview() {
     averageProgress: true,
   })
   const [tableHeight, setTableHeight] = useState(560)
+  const [coverageHeight, setCoverageHeight] = useState(340)
   const [languageAnalyticsSort, setLanguageAnalyticsSort] = useState('coverage-desc')
   const resizeStartYRef = useRef(0)
   const resizeStartHeightRef = useRef(560)
+  const coverageResizeStartYRef = useRef(0)
+  const coverageResizeStartHeightRef = useRef(340)
 
   const data = useLiveQuery(
     async () => {
@@ -619,6 +622,32 @@ export function DashboardOverview() {
     window.addEventListener('mouseup', handleMouseUp)
   }
 
+  const handleCoverageResizeStart = (event) => {
+    event.preventDefault()
+    coverageResizeStartYRef.current = event.clientY
+    coverageResizeStartHeightRef.current = coverageHeight
+
+    const minHeight = 200
+    const maxHeight = Math.max(300, Math.floor(window.innerHeight * 0.75))
+
+    const handleMouseMove = (moveEvent) => {
+      const deltaY = moveEvent.clientY - coverageResizeStartYRef.current
+      const nextHeight = Math.min(
+        maxHeight,
+        Math.max(minHeight, coverageResizeStartHeightRef.current + deltaY),
+      )
+      setCoverageHeight(nextHeight)
+    }
+
+    const handleMouseUp = () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mouseup', handleMouseUp)
+  }
+
   if (!latestUpload) {
     return (
       <section className="mt-8">
@@ -646,7 +675,7 @@ export function DashboardOverview() {
           <p className="mt-3 text-2xl font-semibold text-slate-900">
             {formatNumber(kpis.totalProjects)}
           </p>
-          <p className="mt-2 text-[0.72rem] leading-relaxed text-slate-600">
+          <p className="mt-2 text-sm leading-relaxed text-slate-600">
             Active Lokalise projects included in the most recent export.
           </p>
         </div>
@@ -658,7 +687,7 @@ export function DashboardOverview() {
           <p className="mt-3 text-2xl font-semibold text-slate-900">
             {formatPercent(kpis.averageProgress)}
           </p>
-          <p className="mt-2 text-[0.72rem] leading-relaxed text-slate-600">
+          <p className="mt-2 text-sm leading-relaxed text-slate-600">
             Mean of <span className="font-medium">statistics.progress_total</span> across
             all projects.
           </p>
@@ -671,7 +700,7 @@ export function DashboardOverview() {
           <p className="mt-3 text-2xl font-semibold text-slate-900">
             {formatNumber(kpis.totalBaseWords)}
           </p>
-          <p className="mt-2 text-[0.72rem] leading-relaxed text-slate-600">
+          <p className="mt-2 text-sm leading-relaxed text-slate-600">
             Total source-language words across all projects in this snapshot.
           </p>
         </div>
@@ -683,7 +712,7 @@ export function DashboardOverview() {
           <p className="mt-3 text-2xl font-semibold text-slate-900">
             {formatNumber(kpis.distinctLanguages)}
           </p>
-          <p className="mt-2 text-[0.72rem] leading-relaxed text-slate-600">
+          <p className="mt-2 text-sm leading-relaxed text-slate-600">
             Unique language codes found in project statistics.
           </p>
         </div>
@@ -770,7 +799,7 @@ export function DashboardOverview() {
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-slate-400">
                   Target language
                 </p>
-                <label className="inline-flex cursor-pointer items-center gap-2 text-[0.72rem] font-medium text-slate-500">
+                <label className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-slate-500">
                   <input
                     type="checkbox"
                     checked={!consolidatedLanguageView}
@@ -912,113 +941,130 @@ export function DashboardOverview() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div className="flex flex-col gap-2 p-5 pb-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h3 className="text-xs font-semibold tracking-tight text-slate-900">
               Coverage analytics
             </h3>
-            <p className="mt-1 text-[0.72rem] text-slate-600">
+            <p className="mt-1 text-sm text-slate-600">
               Consolidated-language coverage weighted by base words (latest snapshot).
             </p>
           </div>
         </div>
 
-        <div className="mt-4 grid gap-4 md:grid-cols-3">
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-slate-500">
-              Languages above 90% coverage
-            </p>
-            <p className="mt-2 text-2xl font-semibold text-slate-900">
-              {formatNumber(languagesAboveNinetyPct)}
-            </p>
-            <p className="mt-1 text-[0.72rem] text-slate-600">
-              out of {formatNumber(totalConsolidatedLanguages)} consolidated languages
-            </p>
+        <div
+          className="overflow-auto px-5"
+          style={{ height: `${coverageHeight}px` }}
+        >
+          <div className="grid gap-4 pb-1 md:grid-cols-3">
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                Languages above 90% coverage
+              </p>
+              <p className="mt-2 text-2xl font-semibold text-slate-900">
+                {formatNumber(languagesAboveNinetyPct)}
+              </p>
+              <p className="mt-1 text-sm text-slate-600">
+                out of {formatNumber(totalConsolidatedLanguages)} consolidated languages
+              </p>
+            </div>
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                Overall weighted coverage
+              </p>
+              <p className="mt-2 text-2xl font-semibold text-slate-900">
+                {formatPercent(overallWeightedCoveragePct)}
+              </p>
+              <p className="mt-1 text-sm text-slate-600">
+                weighted by base words across project-language pairs
+              </p>
+            </div>
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                Consolidated languages with data
+              </p>
+              <p className="mt-2 text-2xl font-semibold text-slate-900">
+                {formatNumber(totalConsolidatedLanguages)}
+              </p>
+              <p className="mt-1 text-sm text-slate-600">
+                languages found in current snapshot
+              </p>
+            </div>
           </div>
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-slate-500">
-              Overall weighted coverage
-            </p>
-            <p className="mt-2 text-2xl font-semibold text-slate-900">
-              {formatPercent(overallWeightedCoveragePct)}
-            </p>
-            <p className="mt-1 text-[0.72rem] text-slate-600">
-              weighted by base words across project-language pairs
-            </p>
-          </div>
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-slate-500">
-              Consolidated languages with data
-            </p>
-            <p className="mt-2 text-2xl font-semibold text-slate-900">
-              {formatNumber(totalConsolidatedLanguages)}
-            </p>
-            <p className="mt-1 text-[0.72rem] text-slate-600">
-              languages found in current snapshot
-            </p>
+
+          <div className="mt-5 pb-4">
+            <div className="mb-2 flex items-center justify-between">
+              <h4 className="text-xs font-semibold tracking-tight text-slate-900">
+                Per consolidated language
+              </h4>
+              <select
+                value={languageAnalyticsSort}
+                onChange={(event) => setLanguageAnalyticsSort(event.target.value)}
+                className="rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs text-slate-900 shadow-sm focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900/5"
+              >
+                <option value="coverage-desc">Sort by coverage (high to low)</option>
+                <option value="projects-desc">Sort by projects with language</option>
+              </select>
+            </div>
+
+            <div className="overflow-auto rounded-xl border border-slate-200">
+              <table className="min-w-full text-left text-xs">
+                <thead className="bg-slate-50">
+                  <tr>
+                    <th className="px-3 py-2.5 font-semibold uppercase tracking-wider text-slate-500">
+                      Language
+                    </th>
+                    <th className="px-3 py-2.5 font-semibold uppercase tracking-wider text-slate-500 text-right">
+                      Projects with language
+                    </th>
+                    <th className="px-3 py-2.5 font-semibold uppercase tracking-wider text-slate-500 text-right">
+                      Weighted coverage
+                    </th>
+                    <th className="px-3 py-2.5 font-semibold uppercase tracking-wider text-slate-500 text-right">
+                      Translated / total base words
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 bg-white">
+                  {sortedLanguageCoverageRows.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="px-3 py-8 text-center text-slate-500">
+                        No language coverage data available.
+                      </td>
+                    </tr>
+                  ) : (
+                    sortedLanguageCoverageRows.map((row) => (
+                      <tr key={row.groupKey}>
+                        <td className="px-3 py-2.5 text-slate-900">{row.displayLabel}</td>
+                        <td className="px-3 py-2.5 text-right font-mono text-slate-700">
+                          {formatNumber(row.projectsWithLanguage)}/{formatNumber(row.totalProjects)}
+                        </td>
+                        <td className="px-3 py-2.5 text-right font-mono text-slate-700">
+                          {formatPercent(row.coveragePct)}
+                        </td>
+                        <td className="px-3 py-2.5 text-right font-mono text-slate-700">
+                          {formatNumber(Math.round(row.translatedBaseWords))}/{formatNumber(Math.round(row.totalBaseWords))}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
-        <div className="mt-5">
-          <div className="mb-2 flex items-center justify-between">
-            <h4 className="text-xs font-semibold tracking-tight text-slate-900">
-              Per consolidated language
-            </h4>
-            <select
-              value={languageAnalyticsSort}
-              onChange={(event) => setLanguageAnalyticsSort(event.target.value)}
-              className="rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs text-slate-900 shadow-sm focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900/5"
-            >
-              <option value="coverage-desc">Sort by coverage (high to low)</option>
-              <option value="projects-desc">Sort by projects with language</option>
-            </select>
-          </div>
-
-          <div className="overflow-auto rounded-xl border border-slate-200">
-            <table className="min-w-full text-left text-xs">
-              <thead className="bg-slate-50">
-                <tr>
-                  <th className="px-3 py-2.5 font-semibold uppercase tracking-wider text-slate-500">
-                    Language
-                  </th>
-                  <th className="px-3 py-2.5 font-semibold uppercase tracking-wider text-slate-500 text-right">
-                    Projects with language
-                  </th>
-                  <th className="px-3 py-2.5 font-semibold uppercase tracking-wider text-slate-500 text-right">
-                    Weighted coverage
-                  </th>
-                  <th className="px-3 py-2.5 font-semibold uppercase tracking-wider text-slate-500 text-right">
-                    Translated / total base words
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 bg-white">
-                {sortedLanguageCoverageRows.length === 0 ? (
-                  <tr>
-                    <td colSpan={4} className="px-3 py-8 text-center text-slate-500">
-                      No language coverage data available.
-                    </td>
-                  </tr>
-                ) : (
-                  sortedLanguageCoverageRows.map((row) => (
-                    <tr key={row.groupKey}>
-                      <td className="px-3 py-2.5 text-slate-900">{row.displayLabel}</td>
-                      <td className="px-3 py-2.5 text-right font-mono text-slate-700">
-                        {formatNumber(row.projectsWithLanguage)}/{formatNumber(row.totalProjects)}
-                      </td>
-                      <td className="px-3 py-2.5 text-right font-mono text-slate-700">
-                        {formatPercent(row.coveragePct)}
-                      </td>
-                      <td className="px-3 py-2.5 text-right font-mono text-slate-700">
-                        {formatNumber(Math.round(row.translatedBaseWords))}/{formatNumber(Math.round(row.totalBaseWords))}
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+        <div className="flex justify-center py-1">
+          <button
+            type="button"
+            onMouseDown={handleCoverageResizeStart}
+            className="group flex h-4 w-full cursor-row-resize items-center justify-center"
+            aria-label="Resize coverage analytics height"
+            title="Drag to resize coverage analytics height"
+          >
+            <span className="h-1.5 w-16 rounded-full bg-slate-300 transition-colors group-hover:bg-slate-500" />
+          </button>
         </div>
       </div>
 
@@ -1027,7 +1073,7 @@ export function DashboardOverview() {
           <h3 className="text-xs font-semibold tracking-tight text-slate-900">
             Progress over time
           </h3>
-          <p className="text-[0.72rem] text-slate-600">
+          <p className="text-sm text-slate-600">
             Trend across all imported snapshots for total base words and languages in
             use, project count, and average progress.
           </p>
@@ -1065,10 +1111,10 @@ export function DashboardOverview() {
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             {visibleSeries.totalBaseWords && (
               <div className="rounded-lg border border-slate-200 bg-white p-3">
-                <h4 className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-slate-600">
+                <h4 className="text-sm font-semibold uppercase tracking-[0.14em] text-slate-600">
                   Base words
                 </h4>
-                <p className="mt-1 text-[0.72rem] text-slate-500">
+                <p className="mt-1 text-sm text-slate-500">
                   Total source-language words across all projects in each upload.
                 </p>
                 <div className="mt-3 h-48 w-full">
@@ -1093,10 +1139,10 @@ export function DashboardOverview() {
 
             {visibleSeries.distinctLanguages && (
               <div className="rounded-lg border border-slate-200 bg-white p-3">
-                <h4 className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-slate-600">
+                <h4 className="text-sm font-semibold uppercase tracking-[0.14em] text-slate-600">
                   Languages in use
                 </h4>
-                <p className="mt-1 text-[0.72rem] text-slate-500">
+                <p className="mt-1 text-sm text-slate-500">
                   Count of unique target language codes present per upload.
                 </p>
                 <div className="mt-3 h-48 w-full">
@@ -1121,10 +1167,10 @@ export function DashboardOverview() {
 
             {visibleSeries.totalProjects && (
               <div className="rounded-lg border border-slate-200 bg-white p-3">
-                <h4 className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-slate-600">
+                <h4 className="text-sm font-semibold uppercase tracking-[0.14em] text-slate-600">
                   Number of projects
                 </h4>
-                <p className="mt-1 text-[0.72rem] text-slate-500">
+                <p className="mt-1 text-sm text-slate-500">
                   Number of projects included in each imported snapshot.
                 </p>
                 <div className="mt-3 h-48 w-full">
@@ -1149,10 +1195,10 @@ export function DashboardOverview() {
 
             {visibleSeries.averageProgress && (
               <div className="rounded-lg border border-slate-200 bg-white p-3">
-                <h4 className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-slate-600">
+                <h4 className="text-sm font-semibold uppercase tracking-[0.14em] text-slate-600">
                   Average overall progress
                 </h4>
-                <p className="mt-1 text-[0.72rem] text-slate-500">
+                <p className="mt-1 text-sm text-slate-500">
                   Mean project progress percentage from `statistics.progress_total`.
                 </p>
                 <div className="mt-3 h-48 w-full">
@@ -1176,7 +1222,7 @@ export function DashboardOverview() {
             )}
           </div>
         ) : (
-          <p className="mt-3 text-[0.72rem] text-slate-500">
+          <p className="mt-3 text-sm text-slate-500">
             Import at least one snapshot to populate the chart.
           </p>
         )}
