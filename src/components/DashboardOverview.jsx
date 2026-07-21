@@ -280,12 +280,12 @@ export function DashboardOverview() {
     averageProgress: true,
   })
   const [tableHeight, setTableHeight] = useState(560)
-  const [coverageHeight, setCoverageHeight] = useState(340)
+  const [coverageHeight, setCoverageHeight] = useState(560)
   const [languageAnalyticsSort, setLanguageAnalyticsSort] = useState('coverage-desc')
   const resizeStartYRef = useRef(0)
   const resizeStartHeightRef = useRef(560)
   const coverageResizeStartYRef = useRef(0)
-  const coverageResizeStartHeightRef = useRef(340)
+  const coverageResizeStartHeightRef = useRef(560)
 
   const data = useLiveQuery(
     async () => {
@@ -856,9 +856,12 @@ export function DashboardOverview() {
           )}
         </div>
 
-        <p className="inline-flex items-center gap-1.5 rounded bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-800">
-          ⚠ Progress percentages reflect translation existence only, not quality.
-        </p>
+        <div className="flex items-center gap-3 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3">
+          <span className="text-lg">⚠️</span>
+          <p className="text-sm font-semibold text-amber-900">
+            Progress percentages reflect translation existence only, not quality.
+          </p>
+        </div>
 
         <div
           className="relative overflow-auto rounded-xl border border-slate-200 bg-white shadow-sm"
