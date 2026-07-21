@@ -33,22 +33,22 @@
         "keys_total": 7125,
         "team": 15,
         "base_words": 98575,
-        "qa_issues_total": 184201,
+        "qa_issues_total": 183920,
         "qa_issues": {
-          "not_reviewed": 91744,
-          "unverified": 63215,
-          "spelling_grammar": 23087,
+          "not_reviewed": 91775,
+          "unverified": 63220,
+          "spelling_grammar": 22948,
           "inconsistent_placeholders": 1,
           "inconsistent_html": 0,
           "different_number_of_urls": 0,
           "different_urls": 0,
-          "leading_whitespace": 38,
-          "trailing_whitespace": 2484,
+          "leading_whitespace": 37,
+          "trailing_whitespace": 2407,
           "different_number_of_email_address": 0,
           "different_email_address": 0,
           "different_brackets": 0,
-          "different_numbers": 2538,
-          "double_space": 1083,
+          "different_numbers": 2469,
+          "double_space": 1052,
           "special_placeholder": 0,
           "unbalanced_brackets": 11
         },
@@ -58,8 +58,8 @@
             "project_language_id": 3511383,
             "project_language_uuid": "0196ed04-4310-792e-8593-0ac6e30596e5",
             "language_iso": "ca",
-            "progress": 0,
-            "words_to_do": 98575
+            "progress": 1,
+            "words_to_do": 98491
           },
           {
             "language_id": 767,
@@ -67,7 +67,7 @@
             "project_language_uuid": "0196ed04-4310-792e-8593-0ac6e3dc5149",
             "language_iso": "da",
             "progress": 63,
-            "words_to_do": 36094
+            "words_to_do": 36064
           },
           {
             "language_id": 666,
@@ -99,7 +99,7 @@
             "project_language_uuid": "0196ed04-4310-792e-8593-0ac6e4acee99",
             "language_iso": "fi",
             "progress": 83,
-            "words_to_do": 15998
+            "words_to_do": 15967
           },
           {
             "language_id": 673,
@@ -107,7 +107,7 @@
             "project_language_uuid": "01973643-fba2-7a2f-816d-5eb4d2b1ab08",
             "language_iso": "fr",
             "progress": 70,
-            "words_to_do": 29224
+            "words_to_do": 29195
           },
           {
             "language_id": 734,
@@ -115,7 +115,7 @@
             "project_language_uuid": "0196ed04-4310-792e-8593-0ac6e0fef078",
             "language_iso": "it",
             "progress": 57,
-            "words_to_do": 42210
+            "words_to_do": 42174
           },
           {
             "language_id": 643,
@@ -123,7 +123,7 @@
             "project_language_uuid": "0196ed04-4310-792e-8593-0ac6dec64076",
             "language_iso": "ja",
             "progress": 95,
-            "words_to_do": 4745
+            "words_to_do": 4719
           },
           {
             "language_id": 733,
@@ -131,7 +131,7 @@
             "project_language_uuid": "0196ed04-4310-792e-8593-0ac6e0ebd800",
             "language_iso": "ko",
             "progress": 94,
-            "words_to_do": 5256
+            "words_to_do": 5230
           },
           {
             "language_id": 759,
@@ -139,7 +139,7 @@
             "project_language_uuid": "0196ed04-4310-792e-8593-0ac6e26cf60b",
             "language_iso": "nb",
             "progress": 89,
-            "words_to_do": 10308
+            "words_to_do": 10307
           },
           {
             "language_id": 737,
@@ -147,7 +147,7 @@
             "project_language_uuid": "01973644-cee2-7faf-b4c6-0f07904e2017",
             "language_iso": "nl",
             "progress": 43,
-            "words_to_do": 55445
+            "words_to_do": 55390
           },
           {
             "language_id": 748,
@@ -155,7 +155,7 @@
             "project_language_uuid": "0196ed04-4310-792e-8593-0ac6e210dd84",
             "language_iso": "pl",
             "progress": 92,
-            "words_to_do": 7861
+            "words_to_do": 7833
           },
           {
             "language_id": 1057,
@@ -163,7 +163,7 @@
             "project_language_uuid": "0196ed04-4310-792e-8593-0ac6e5b2c4fc",
             "language_iso": "pt",
             "progress": 53,
-            "words_to_do": 46177
+            "words_to_do": 46141
           },
           {
             "language_id": 754,
@@ -171,7 +171,7 @@
             "project_language_uuid": "0196ed04-4310-792e-8593-0ac6e214a36a",
             "language_iso": "sv",
             "progress": 90,
-            "words_to_do": 9773
+            "words_to_do": 9745
           }
         ]
       },
@@ -1541,21 +1541,21 @@
         "custom_translation_statuses_allow_multiple": false
       },
       "statistics": {
-        "progress_total": 30,
+        "progress_total": 34,
         "keys_total": 50,
         "team": 8,
         "base_words": 3292,
-        "qa_issues_total": 2770,
+        "qa_issues_total": 1854,
         "qa_issues": {
-          "not_reviewed": 1400,
-          "unverified": 1145,
-          "spelling_grammar": 122,
+          "not_reviewed": 950,
+          "unverified": 706,
+          "spelling_grammar": 119,
           "inconsistent_placeholders": 0,
           "inconsistent_html": 0,
           "different_number_of_urls": 0,
           "different_urls": 0,
-          "leading_whitespace": 51,
-          "trailing_whitespace": 52,
+          "leading_whitespace": 47,
+          "trailing_whitespace": 32,
           "different_number_of_email_address": 0,
           "different_email_address": 0,
           "different_brackets": 0,
@@ -1574,14 +1574,6 @@
             "words_to_do": 1902
           },
           {
-            "language_id": 765,
-            "project_language_id": 2031089,
-            "project_language_uuid": "01898729-2540-7ffb-8271-3a4bb6fe218a",
-            "language_iso": "cs",
-            "progress": 1,
-            "words_to_do": 3229
-          },
-          {
             "language_id": 10167,
             "project_language_id": 1847890,
             "project_language_uuid": "0187234a-13b0-7475-9a49-35787d0c56fa",
@@ -1596,14 +1588,6 @@
             "language_iso": "da_DK",
             "progress": 3,
             "words_to_do": 3186
-          },
-          {
-            "language_id": 666,
-            "project_language_id": 1143747,
-            "project_language_uuid": "017dbdb8-35d0-77a7-bbdf-bcddcb2fd20a",
-            "language_iso": "de",
-            "progress": 4,
-            "words_to_do": 3132
           },
           {
             "language_id": 672,
@@ -1622,14 +1606,6 @@
             "words_to_do": 0
           },
           {
-            "language_id": 1056,
-            "project_language_id": 1508020,
-            "project_language_uuid": "018282ef-2170-7d9a-8c16-c2a5b7f77797",
-            "language_iso": "es",
-            "progress": 1,
-            "words_to_do": 3241
-          },
-          {
             "language_id": 665,
             "project_language_id": 683156,
             "project_language_uuid": "01778776-f098-72a6-a18d-6c632520243c",
@@ -1638,28 +1614,12 @@
             "words_to_do": 1902
           },
           {
-            "language_id": 768,
-            "project_language_id": 2794833,
-            "project_language_uuid": "0191b2fb-62e8-7d0a-8af9-f0e4115f81fb",
-            "language_iso": "fi",
-            "progress": 88,
-            "words_to_do": 386
-          },
-          {
             "language_id": 10156,
             "project_language_id": 2794831,
             "project_language_uuid": "0191b2f9-7e88-7dd6-8643-3926a5698079",
             "language_iso": "fi_FI",
             "progress": 97,
             "words_to_do": 67
-          },
-          {
-            "language_id": 673,
-            "project_language_id": 1143748,
-            "project_language_uuid": "017dbdb8-35d0-77a7-bbdf-bcddcb41948d",
-            "language_iso": "fr",
-            "progress": 1,
-            "words_to_do": 3241
           },
           {
             "language_id": 706,
@@ -1678,26 +1638,10 @@
             "words_to_do": 3292
           },
           {
-            "language_id": 643,
-            "project_language_id": 1982090,
-            "project_language_uuid": "0188dd0c-af00-742a-a46e-c6ff376ad811",
-            "language_iso": "ja",
-            "progress": 42,
-            "words_to_do": 1902
-          },
-          {
             "language_id": 10165,
             "project_language_id": 714929,
             "project_language_uuid": "0177d501-3c60-7b5d-8f8e-cf5308fede74",
             "language_iso": "ja_JP",
-            "progress": 42,
-            "words_to_do": 1902
-          },
-          {
-            "language_id": 759,
-            "project_language_id": 2794834,
-            "project_language_uuid": "0191b2fb-62e8-7d0a-8af9-f0e411e58918",
-            "language_iso": "nb",
             "progress": 42,
             "words_to_do": 1902
           },
@@ -1716,22 +1660,6 @@
             "language_iso": "nl",
             "progress": 38,
             "words_to_do": 2011
-          },
-          {
-            "language_id": 760,
-            "project_language_id": 311735,
-            "project_language_uuid": "016f7bf1-ecd0-76b4-a877-72cd33692468",
-            "language_iso": "no",
-            "progress": 23,
-            "words_to_do": 2519
-          },
-          {
-            "language_id": 10216,
-            "project_language_id": 2794830,
-            "project_language_uuid": "0191b2f9-7e88-7dd6-8643-3926a4f813e6",
-            "language_iso": "no_NO",
-            "progress": 0,
-            "words_to_do": 3292
           },
           {
             "language_id": 707,
@@ -4713,15 +4641,15 @@
         "custom_translation_statuses_allow_multiple": false
       },
       "statistics": {
-        "progress_total": 85,
+        "progress_total": 90,
         "keys_total": 2219,
         "team": 31,
         "base_words": 10659,
-        "qa_issues_total": 47329,
+        "qa_issues_total": 42907,
         "qa_issues": {
-          "not_reviewed": 28009,
-          "unverified": 12885,
-          "spelling_grammar": 6284,
+          "not_reviewed": 25765,
+          "unverified": 10709,
+          "spelling_grammar": 6282,
           "inconsistent_placeholders": 13,
           "inconsistent_html": 3,
           "different_number_of_urls": 0,
@@ -4760,14 +4688,6 @@
             "language_iso": "de_DE",
             "progress": 100,
             "words_to_do": 0
-          },
-          {
-            "language_id": 640,
-            "project_language_id": 4692025,
-            "project_language_uuid": "019dfc36-5081-7d83-9ddc-2649f11ba7c9",
-            "language_iso": "en",
-            "progress": 3,
-            "words_to_do": 10331
           },
           {
             "language_id": 610,
@@ -4910,10 +4830,10 @@
         "keys_total": 1432,
         "team": 16,
         "base_words": 7487,
-        "qa_issues_total": 34931,
+        "qa_issues_total": 34818,
         "qa_issues": {
           "not_reviewed": 19719,
-          "unverified": 9027,
+          "unverified": 8914,
           "spelling_grammar": 6038,
           "inconsistent_placeholders": 51,
           "inconsistent_html": 42,
@@ -5513,17 +5433,17 @@
         "keys_total": 258,
         "team": 23,
         "base_words": 481,
-        "qa_issues_total": 6126,
+        "qa_issues_total": 5233,
         "qa_issues": {
-          "not_reviewed": 2980,
-          "unverified": 2725,
-          "spelling_grammar": 418,
+          "not_reviewed": 2528,
+          "unverified": 2280,
+          "spelling_grammar": 416,
           "inconsistent_placeholders": 0,
           "inconsistent_html": 0,
           "different_number_of_urls": 0,
           "different_urls": 0,
-          "leading_whitespace": 0,
-          "trailing_whitespace": 3,
+          "leading_whitespace": 1,
+          "trailing_whitespace": 8,
           "different_number_of_email_address": 0,
           "different_email_address": 0,
           "different_brackets": 0,
@@ -5706,10 +5626,10 @@
         "keys_total": 1162,
         "team": 25,
         "base_words": 4325,
-        "qa_issues_total": 54740,
+        "qa_issues_total": 54739,
         "qa_issues": {
           "not_reviewed": 32162,
-          "unverified": 20911,
+          "unverified": 20910,
           "spelling_grammar": 1573,
           "inconsistent_placeholders": 8,
           "inconsistent_html": 0,
@@ -6405,11 +6325,11 @@
         "keys_total": 1612,
         "team": 25,
         "base_words": 8917,
-        "qa_issues_total": 29398,
+        "qa_issues_total": 29345,
         "qa_issues": {
-          "not_reviewed": 17340,
-          "unverified": 9566,
-          "spelling_grammar": 2213,
+          "not_reviewed": 17337,
+          "unverified": 9515,
+          "spelling_grammar": 2214,
           "inconsistent_placeholders": 47,
           "inconsistent_html": 55,
           "different_number_of_urls": 0,
@@ -6431,7 +6351,7 @@
             "project_language_uuid": "01843d79-1018-7683-968f-0633461b8b08",
             "language_iso": "ca",
             "progress": 99,
-            "words_to_do": 83
+            "words_to_do": 80
           },
           {
             "language_id": 10167,
@@ -6439,7 +6359,7 @@
             "project_language_uuid": "01843d78-8f30-7c3d-ac0f-97a859ac1bbf",
             "language_iso": "cs_CZ",
             "progress": 99,
-            "words_to_do": 15
+            "words_to_do": 12
           },
           {
             "language_id": 871,
@@ -6447,7 +6367,7 @@
             "project_language_uuid": "0196345c-6add-75b4-8b6c-6feafd082abf",
             "language_iso": "cy_GB",
             "progress": 98,
-            "words_to_do": 107
+            "words_to_do": 104
           },
           {
             "language_id": 10168,
@@ -6455,7 +6375,7 @@
             "project_language_uuid": "0186c684-7558-7f33-b138-0498e66789e0",
             "language_iso": "da_DK",
             "progress": 99,
-            "words_to_do": 85
+            "words_to_do": 82
           },
           {
             "language_id": 672,
@@ -6463,7 +6383,7 @@
             "project_language_uuid": "017a570a-de80-7932-8418-2d3dd4ff9a8b",
             "language_iso": "de_DE",
             "progress": 99,
-            "words_to_do": 83
+            "words_to_do": 80
           },
           {
             "language_id": 610,
@@ -6471,7 +6391,7 @@
             "project_language_uuid": "017d0aba-99c8-7a82-89ab-e9c438e8c895",
             "language_iso": "en_GB",
             "progress": 99,
-            "words_to_do": 50
+            "words_to_do": 47
           },
           {
             "language_id": 1055,
@@ -6487,7 +6407,7 @@
             "project_language_uuid": "017a570a-e650-7f03-94e4-5d5d592c0377",
             "language_iso": "es_ES",
             "progress": 99,
-            "words_to_do": 83
+            "words_to_do": 80
           },
           {
             "language_id": 10156,
@@ -6495,7 +6415,7 @@
             "project_language_uuid": "0190de97-7fc8-7856-9e4b-74f098e8e809",
             "language_iso": "fi_FI",
             "progress": 99,
-            "words_to_do": 30
+            "words_to_do": 27
           },
           {
             "language_id": 706,
@@ -6503,7 +6423,7 @@
             "project_language_uuid": "017a5721-8f18-7c60-83dc-0aa488c64666",
             "language_iso": "fr_FR",
             "progress": 99,
-            "words_to_do": 85
+            "words_to_do": 82
           },
           {
             "language_id": 736,
@@ -6511,7 +6431,7 @@
             "project_language_uuid": "017af23c-ed08-78c3-bef8-3d4c4802548f",
             "language_iso": "it_IT",
             "progress": 99,
-            "words_to_do": 83
+            "words_to_do": 80
           },
           {
             "language_id": 10165,
@@ -6519,7 +6439,7 @@
             "project_language_uuid": "01831714-4948-75ef-b27b-bf84d01f3666",
             "language_iso": "ja_JP",
             "progress": 99,
-            "words_to_do": 15
+            "words_to_do": 12
           },
           {
             "language_id": 10173,
@@ -6527,7 +6447,7 @@
             "project_language_uuid": "0190de63-dd08-7e79-8795-565454118b20",
             "language_iso": "ko_KR",
             "progress": 99,
-            "words_to_do": 82
+            "words_to_do": 79
           },
           {
             "language_id": 10174,
@@ -6535,7 +6455,7 @@
             "project_language_uuid": "0190de9a-a478-752e-bb04-ccc67330545d",
             "language_iso": "nb_NO",
             "progress": 99,
-            "words_to_do": 45
+            "words_to_do": 42
           },
           {
             "language_id": 743,
@@ -6543,7 +6463,7 @@
             "project_language_uuid": "017a5c81-fe48-73a5-8729-9dd5595908ab",
             "language_iso": "nl_NL",
             "progress": 99,
-            "words_to_do": 83
+            "words_to_do": 80
           },
           {
             "language_id": 10157,
@@ -6551,7 +6471,7 @@
             "project_language_uuid": "0196382a-eaf1-7cef-9ae2-15a263cae1b1",
             "language_iso": "pl_PL",
             "progress": 98,
-            "words_to_do": 102
+            "words_to_do": 99
           },
           {
             "language_id": 707,
@@ -6559,7 +6479,7 @@
             "project_language_uuid": "018b6b01-c8e8-7b50-ac4b-7ce1d3597b82",
             "language_iso": "pt_PT",
             "progress": 99,
-            "words_to_do": 83
+            "words_to_do": 80
           },
           {
             "language_id": 756,
@@ -6567,7 +6487,7 @@
             "project_language_uuid": "0185c5c3-68a0-7ed0-962f-ac912d58073c",
             "language_iso": "sv_SE",
             "progress": 99,
-            "words_to_do": 49
+            "words_to_do": 46
           }
         ]
       },
@@ -8125,17 +8045,17 @@
         "keys_total": 672,
         "team": 24,
         "base_words": 3214,
-        "qa_issues_total": 16870,
+        "qa_issues_total": 16869,
         "qa_issues": {
           "not_reviewed": 8543,
           "unverified": 6572,
           "spelling_grammar": 1436,
-          "inconsistent_placeholders": 16,
+          "inconsistent_placeholders": 15,
           "inconsistent_html": 2,
           "different_number_of_urls": 0,
           "different_urls": 0,
-          "leading_whitespace": 18,
-          "trailing_whitespace": 283,
+          "leading_whitespace": 16,
+          "trailing_whitespace": 285,
           "different_number_of_email_address": 0,
           "different_email_address": 0,
           "different_brackets": 0,
@@ -8238,8 +8158,8 @@
             "project_language_id": 1217690,
             "project_language_uuid": "017ed9b0-7030-7067-9a46-c6b11b992168",
             "language_iso": "ko_KR",
-            "progress": 96,
-            "words_to_do": 104
+            "progress": 100,
+            "words_to_do": 0
           },
           {
             "language_id": 10174,
@@ -8314,14 +8234,14 @@
         "custom_translation_statuses_allow_multiple": false
       },
       "statistics": {
-        "progress_total": 18,
+        "progress_total": 22,
         "keys_total": 41,
         "team": 6,
         "base_words": 237,
-        "qa_issues_total": 2719,
+        "qa_issues_total": 2063,
         "qa_issues": {
-          "not_reviewed": 1409,
-          "unverified": 1221,
+          "not_reviewed": 1081,
+          "unverified": 893,
           "spelling_grammar": 86,
           "inconsistent_placeholders": 0,
           "inconsistent_html": 3,
@@ -8343,22 +8263,6 @@
             "project_language_id": 4567578,
             "project_language_uuid": "019d4996-9ad1-7a41-a5bc-d9fb1d7137f1",
             "language_iso": "ar_AE",
-            "progress": 1,
-            "words_to_do": 235
-          },
-          {
-            "language_id": 906,
-            "project_language_id": 4567584,
-            "project_language_uuid": "019d4996-9c5e-72d8-8ca6-76bcb072a4f3",
-            "language_iso": "be_BY",
-            "progress": 1,
-            "words_to_do": 235
-          },
-          {
-            "language_id": 780,
-            "project_language_id": 4567582,
-            "project_language_uuid": "019d4996-9bd5-7a36-9fb3-f4e836a89931",
-            "language_iso": "bg_BG",
             "progress": 1,
             "words_to_do": 235
           },
@@ -8459,14 +8363,6 @@
             "words_to_do": 0
           },
           {
-            "language_id": 648,
-            "project_language_id": 4567577,
-            "project_language_uuid": "019d4996-9a8c-74e1-b48c-f78368e4085f",
-            "language_iso": "es_MX",
-            "progress": 1,
-            "words_to_do": 235
-          },
-          {
             "language_id": 10156,
             "project_language_id": 4488377,
             "project_language_uuid": "019cfb40-c720-792f-af5a-9ccef3168309",
@@ -8481,14 +8377,6 @@
             "language_iso": "fr_FR",
             "progress": 100,
             "words_to_do": 0
-          },
-          {
-            "language_id": 10169,
-            "project_language_id": 4567585,
-            "project_language_uuid": "019d4996-9caa-7260-8178-d29f0a376fcd",
-            "language_iso": "he_IL",
-            "progress": 1,
-            "words_to_do": 235
           },
           {
             "language_id": 736,
@@ -8579,14 +8467,6 @@
             "words_to_do": 211
           },
           {
-            "language_id": 10178,
-            "project_language_id": 4567586,
-            "project_language_uuid": "019d4996-9cee-76d1-a55d-bc2ba9ca8d34",
-            "language_iso": "th_TH",
-            "progress": 1,
-            "words_to_do": 235
-          },
-          {
             "language_id": 10179,
             "project_language_id": 4567587,
             "project_language_uuid": "019d4996-9d35-724e-8b8a-129bc12a5cbe",
@@ -8599,30 +8479,6 @@
             "project_language_id": 4567588,
             "project_language_uuid": "019d4996-9d78-735f-90c2-a7cd420abac3",
             "language_iso": "uk_UA",
-            "progress": 1,
-            "words_to_do": 235
-          },
-          {
-            "language_id": 602,
-            "project_language_id": 4567573,
-            "project_language_uuid": "019d4996-9972-7134-9159-38124f8e9e31",
-            "language_iso": "zh_CN",
-            "progress": 1,
-            "words_to_do": 235
-          },
-          {
-            "language_id": 605,
-            "project_language_id": 4567574,
-            "project_language_uuid": "019d4996-99b7-7f6b-b5f6-bc52d6edb0f3",
-            "language_iso": "zh_Hans_CN",
-            "progress": 1,
-            "words_to_do": 235
-          },
-          {
-            "language_id": 601,
-            "project_language_id": 4567572,
-            "project_language_uuid": "019d4996-9925-7c8b-b08f-6cf73ce3167e",
-            "language_iso": "zh_TW",
             "progress": 1,
             "words_to_do": 235
           }
@@ -9782,13 +9638,13 @@
       },
       "statistics": {
         "progress_total": 99,
-        "keys_total": 257,
+        "keys_total": 260,
         "team": 15,
-        "base_words": 1664,
-        "qa_issues_total": 1211,
+        "base_words": 1680,
+        "qa_issues_total": 1232,
         "qa_issues": {
-          "not_reviewed": 1034,
-          "unverified": 41,
+          "not_reviewed": 1049,
+          "unverified": 47,
           "spelling_grammar": 136,
           "inconsistent_placeholders": 0,
           "inconsistent_html": 0,
@@ -9834,16 +9690,16 @@
             "project_language_id": 4150347,
             "project_language_uuid": "019b08a4-5be3-7f23-9648-5881dea69fb2",
             "language_iso": "fr_FR",
-            "progress": 100,
-            "words_to_do": 0
+            "progress": 99,
+            "words_to_do": 16
           },
           {
             "language_id": 739,
             "project_language_id": 4150348,
             "project_language_uuid": "019b08a4-5be3-7f23-9648-5881deaf72f4",
             "language_iso": "nl_BE",
-            "progress": 100,
-            "words_to_do": 0
+            "progress": 99,
+            "words_to_do": 16
           }
         ]
       },
@@ -9879,14 +9735,14 @@
       },
       "statistics": {
         "progress_total": 99,
-        "keys_total": 1178,
+        "keys_total": 1179,
         "team": 13,
-        "base_words": 9588,
-        "qa_issues_total": 7345,
+        "base_words": 9607,
+        "qa_issues_total": 7352,
         "qa_issues": {
-          "not_reviewed": 5252,
-          "unverified": 963,
-          "spelling_grammar": 1011,
+          "not_reviewed": 5257,
+          "unverified": 966,
+          "spelling_grammar": 1010,
           "inconsistent_placeholders": 31,
           "inconsistent_html": 9,
           "different_number_of_urls": 0,
