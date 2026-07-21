@@ -33,8 +33,6 @@ export const PRODUCT_GROUPS = [
     label: 'Core Workouts',
     projectNames: [
       'Activity Library',
-      'AL-development-cat',
-      'AL-development-staging',
       'Business Suite (old)',
       'Mirror Opt-in - Shared',
     ],
@@ -123,6 +121,8 @@ export const PRODUCT_GROUPS = [
     label: 'Test / Demo',
     excluded: true,
     projectNames: [
+      'AL-development-cat',
+      'AL-development-staging',
       'Design Test Project',
       'Figma Demo',
       'One Echo Beta Test',
