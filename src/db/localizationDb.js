@@ -63,11 +63,13 @@ export async function createUploadSnapshot({
   originalFileName = 'Lokalise_projects.json',
   projectCount = 0,
   importedAt = new Date(),
+  contentHash = null,
 } = {}) {
   const uploadId = await db.uploads.add({
     importedAt,
     originalFileName,
     projectCount,
+    contentHash,
   })
 
   return { uploadId, importedAt }
@@ -123,6 +125,7 @@ export function normalizeLokaliseProjects(rawJson, { uploadId, importedAt }) {
 export async function saveLokaliseUpload(rawJson, {
   originalFileName = 'Lokalise_projects.json',
   importedAt = new Date(),
+  contentHash = null,
 } = {}) {
   const projects = rawJson && Array.isArray(rawJson.projects)
     ? rawJson.projects
@@ -134,6 +137,7 @@ export async function saveLokaliseUpload(rawJson, {
     originalFileName,
     projectCount,
     importedAt,
+    contentHash,
   })
 
   const snapshots = normalizeLokaliseProjects(rawJson, { uploadId, importedAt })
@@ -160,10 +164,8 @@ function parseDateFromFilename(filename) {
 let syncInProgress = false
 
 /**
- * Fetches public/snapshots/manifest.json, compares the listed filenames
- * against what is already in IndexedDB, and imports any missing ones.
- * Deduplicates by both filename and parsed export date so renamed files
- * from prior manual uploads are not imported again.
+ * Fetches public/snapshots/manifest.json, compares listed files against
+ * IndexedDB, and imports any that are new or have changed (via content hash).
  * Safe to call on every page load.
  */
 export async function fetchAndImportMissingSnapshots() {
@@ -177,28 +179,46 @@ export async function fetchAndImportMissingSnapshots() {
     const manifest = await manifestResponse.json()
     if (!Array.isArray(manifest) || manifest.length === 0) return { imported: 0 }
 
+    // Support both old format (array of strings) and new format (array of {filename, hash})
+    const entries = manifest.map((entry) =>
+      typeof entry === 'string' ? { filename: entry, hash: null } : entry,
+    )
+
     const existingUploads = await db.uploads.toArray()
-    const existingFilenames = new Set(existingUploads.map((u) => u.originalFileName))
+    const uploadByFilename = new Map(existingUploads.map((u) => [u.originalFileName, u]))
     const existingDates = new Set(
       existingUploads
         .map((u) => (u.importedAt instanceof Date ? u.importedAt.toISOString().slice(0, 10) : null))
         .filter(Boolean),
     )
 
-    const toImport = manifest.filter((filename) => {
-      if (existingFilenames.has(filename)) return false
-      const parsed = parseDateFromFilename(filename)
-      if (parsed && existingDates.has(parsed.toISOString().slice(0, 10))) return false
-      return true
-    })
-
     let imported = 0
-    for (const filename of toImport) {
+    for (const { filename, hash } of entries) {
+      const existing = uploadByFilename.get(filename)
+
+      if (existing) {
+        // Skip if hash matches — file unchanged
+        if (hash && existing.contentHash === hash) continue
+
+        // Hash changed: delete old upload and its snapshots, then re-import
+        if (hash && existing.contentHash !== hash) {
+          await db.projectSnapshots.where('uploadId').equals(existing.id).delete()
+          await db.uploads.delete(existing.id)
+        } else {
+          // No hash in manifest (old format) — fall back to skipping by filename
+          continue
+        }
+      } else {
+        // New file: also skip if another upload already covers this date
+        const parsed = parseDateFromFilename(filename)
+        if (parsed && existingDates.has(parsed.toISOString().slice(0, 10))) continue
+      }
+
       const fileResponse = await fetch(`./snapshots/${filename}`)
       if (!fileResponse.ok) continue
       const json = await fileResponse.json()
       const importedAt = parseDateFromFilename(filename) ?? new Date()
-      await saveLokaliseUpload(json, { originalFileName: filename, importedAt })
+      await saveLokaliseUpload(json, { originalFileName: filename, importedAt, contentHash: hash })
       imported++
     }
 

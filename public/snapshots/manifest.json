@@ -1,9 +1,30 @@
 [
-  "2026-02-26_Lokalise_projects.json",
-  "2026-03-02_Lokalise_projects.json",
-  "2026-03-24_Lokalise_projects.json",
-  "2026-04-01_Lokalise_projects.json",
-  "2026-04-13_Lokalise_projects.json",
-  "2026-06-30_Lokalise_projects.json",
-  "2026-07-21_Lokalise_projects.json"
+  {
+    "filename": "2026-02-26_Lokalise_projects.json",
+    "hash": "46293095e12bccb5"
+  },
+  {
+    "filename": "2026-03-02_Lokalise_projects.json",
+    "hash": "c9dc3c4aa1e00e13"
+  },
+  {
+    "filename": "2026-03-24_Lokalise_projects.json",
+    "hash": "a62387e58328f155"
+  },
+  {
+    "filename": "2026-04-01_Lokalise_projects.json",
+    "hash": "e17eee6e486408b1"
+  },
+  {
+    "filename": "2026-04-13_Lokalise_projects.json",
+    "hash": "f6cd6c4c6f5d5fba"
+  },
+  {
+    "filename": "2026-06-30_Lokalise_projects.json",
+    "hash": "123479025acc6257"
+  },
+  {
+    "filename": "2026-07-21_Lokalise_projects.json",
+    "hash": "037d24915cf4210d"
+  }
 ]
