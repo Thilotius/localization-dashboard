@@ -92,6 +92,7 @@ export const PRODUCT_GROUPS = [
       'BMA Mobile',
       'Wellpass App (BMA Mobile Adaptation)',
       'Wellpass App (Configuration)',
+      'Wellpass Checkin Backend',
       'Wellpass Checkin MWA',
       'Wellpass Class Booking backend',
       'Wellpass Class Booking MWA',
