@@ -90,47 +90,60 @@ Three fields **must be empty** in every committed snapshot:
 The Lokalise API token:
 
 - **Never appears in any committed file** (no `.env` in repo, no hardcoded in scripts)
-- **Passed via environment variable only:** `LOKALISE_API_TOKEN=xxx fetch-snapshot.mjs`
+- **Passed via environment variable only:** `LOKALISE_API_TOKEN=... npm run snapshot`
 - **Rotated regularly** after each use in a transcript or committed file (though we never commit it)
 
 The token's scope should be **read-only** (statistics + translations endpoint, no project writes).
 
 ## Updating a Snapshot
 
-### Current Workflow: Manual Export
+### Current Workflow: Automated Weekly Update
 
-1. **Export from Lokalise UI** (or automated export tool you maintain elsewhere)
-   - Save as `Lokalise_projects.json`
+GitHub Actions runs `.github/workflows/update-snapshot.yml` every **Monday at 06:00 UTC** and also allows **manual `workflow_dispatch`** runs from the Actions tab.
 
-2. **Redact and import** using a temporary script or the one below:
-   ```bash
-   # Option A: Quick redaction before committing
-   node -e "
-   const fs=require('fs');
-   const d=JSON.parse(fs.readFileSync('Lokalise_projects.json','utf-8'));
-   for(const p of d.projects??[]){
-     p.created_by_email=''; p.created_by=0; p.description='';
-   }
-   fs.writeFileSync('public/snapshots/$(date +%Y-%m-%d)_Lokalise_projects.json',
-     JSON.stringify(d,null,2),'utf-8');
-   "
-   ```
+One-time setup:
 
-3. **Update the Manifest** (see next section)
+- Add the repository Actions secret **`LOKALISE_API_TOKEN`**
+- Use a **read-only** Lokalise token
+- Do not print or commit the token anywhere
 
-### Future: Via API (Not Yet Implemented)
+Workflow behavior:
 
-A `scripts/fetch-snapshot.mjs` script *could* automate the export + redaction step (see "Fetching via API" section below), but it's not currently in the repo. When/if committed, the workflow would be:
+- Checks out `main`
+- Runs `npm ci`
+- Runs `npm run snapshot`
+- Runs `npm run scrub`
+- Runs `npm run lint`
+- Runs `npm run build`
+- Commits only changed files in `public/snapshots/`
+- Pushes the snapshot update back to `main`
+- Exits successfully when there is nothing new to commit
+
+If a snapshot already exists for the current UTC date, the workflow safely skips the fetch step instead of overwriting the file.
+
+### Local Manual Run
+
+To run the same process locally:
 
 ```bash
-LOKALISE_API_TOKEN=<your-token> npm run snapshot
+LOKALISE_API_TOKEN=your-read-only-token npm run snapshot
 npm run scrub
-git add public/snapshots/*.json
-git commit -m "Add YYYY-MM-DD snapshot"
-git push
+npm run lint
+npm run build
 ```
 
-The benefit: eliminates manual export step and enables one-line snapshot updates.
+The fetch script writes `public/snapshots/YYYY-MM-DD_Lokalise_projects.json` based on the **current UTC date**. By default it **refuses to overwrite** an existing file for the same date:
+
+```bash
+npm run snapshot
+# -> Snapshot already exists at public/snapshots/YYYY-MM-DD_Lokalise_projects.json. Refusing to overwrite without --overwrite.
+```
+
+If you intentionally need to replace the same-day file, use the script directly and document why in the commit:
+
+```bash
+LOKALISE_API_TOKEN=your-read-only-token node scripts/fetch-snapshot.mjs --overwrite
+```
 
 ### Update the Manifest
 
@@ -150,75 +163,26 @@ This script:
 
 ```bash
 git add public/snapshots/
-git commit -m "Add YYYY-MM-DD snapshot
-
-Redacted created_by, created_by_email and description.
-Manifest updated with content hash.
-
-Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>"
+git commit -m "Add YYYY-MM-DD snapshot"
 git push origin main
 ```
 
-This triggers the GitHub Actions workflow (`.github/workflows/deploy.yml`), which builds and deploys to GitHub Pages. The new snapshot is fetched by the dashboard on next page load.
+This triggers the GitHub Pages deploy workflow (`.github/workflows/deploy.yml`), which builds and deploys the app. The new snapshot is fetched by the dashboard on next page load.
 
-## Fetching via API (Optional Automation)
+## Fetching via API
 
-**Status:** This script does not yet exist in the repo. Implementing it requires a decision (see Future section in this guide).
+`scripts/fetch-snapshot.mjs` is the supported export path for both local runs and GitHub Actions automation.
 
-If implemented, it would live at `scripts/fetch-snapshot.mjs` and enable automated snapshot fetches via the Lokalise API, eliminating the manual export step.
+Behavior:
 
-### Proposed Script
-
-Here's the reference implementation (not yet committed):
-
-```javascript
-#!/usr/bin/env node
-import { writeFileSync } from 'fs'
-
-const token = process.env.LOKALISE_API_TOKEN
-const dest = process.argv[2]
-if (!token || !dest) throw new Error('need LOKALISE_API_TOKEN and dest path')
-
-const LIMIT = 100
-const projects = []
-let page = 1
-let pageCount = 1
-
-do {
-  const res = await fetch(
-    `https://api.lokalise.com/api2/projects?limit=${LIMIT}&page=${page}`,
-    { headers: { 'X-Api-Token': token } },
-  )
-  if (!res.ok) throw new Error(`Lokalise API ${res.status}: ${await res.text()}`)
-  pageCount = Number(res.headers.get('x-pagination-page-count') ?? 1)
-  const body = await res.json()
-  projects.push(...(body.projects ?? []))
-  page++
-} while (page <= pageCount)
-
-let redacted = 0
-for (const project of projects) {
-  if (project.created_by_email) { project.created_by_email = ''; redacted++ }
-  if (project.created_by) { project.created_by = 0; redacted++ }
-  if (project.description) { project.description = ''; redacted++ }
-}
-
-projects.sort((a, b) => String(a.name).toLowerCase().localeCompare(String(b.name).toLowerCase()))
-
-writeFileSync(dest, JSON.stringify({ projects }, null, 2), 'utf-8')
-console.log(`Wrote ${dest}: ${projects.length} projects, ${redacted} field(s) redacted.`)
-```
-
-Add to `package.json`:
-
-```json
-{
-  "scripts": {
-    "snapshot": "node scripts/fetch-snapshot.mjs public/snapshots/$(date +%Y-%m-%d)_Lokalise_projects.json",
-    "scrub": "node scripts/scrub-snapshots.js"
-  }
-}
-```
+- Reads the token from `process.env.LOKALISE_API_TOKEN` only
+- Fails immediately and clearly when the token is missing
+- Uses Lokalise's paginated `GET /api2/projects` endpoint
+- Rejects HTTP failures, invalid JSON, and malformed payloads with explicit errors
+- Redacts `created_by_email`, `created_by`, and `description` in memory before writing
+- Sorts projects deterministically by case-insensitive project name
+- Writes `public/snapshots/YYYY-MM-DD_Lokalise_projects.json`
+- Refuses to overwrite the same-day file unless `--overwrite` is passed explicitly
 
 ### Throughput
 
@@ -281,6 +245,7 @@ db.version(2).stores({
 
 ### New snapshot doesn't appear
 - Check `npm run scrub` output — are all projects PII-free?
+- Verify `.github/workflows/update-snapshot.yml` ran and either created a new dated snapshot or intentionally skipped because today's file already existed
 - Verify the deploy ran: `.github/workflows/deploy.yml` in Actions
 - Clear browser cache and check IndexedDB in DevTools
 
@@ -289,34 +254,15 @@ db.version(2).stores({
 - File was updated after manifest was written? Re-fetch and re-scrub
 
 ### API token fails
+- Missing token? Set `LOKALISE_API_TOKEN` locally or add the repository Actions secret before running the workflow
 - Token is read-only? Regenerate if you're unsure
 - Rate limit hit? Wait ~60s, Lokalise resets per-minute buckets
+- HTTP/API error? The fetch script exits without writing a partial snapshot
+- Malformed response? Treat it as an API issue and rerun once Lokalise returns a valid `projects` array
 
 ## Future Work
 
-### 1. Automated Snapshot Fetching via API
-
-**Decision needed:** Should `scripts/fetch-snapshot.mjs` be committed to the repo?
-
-**Pros:**
-- Eliminates manual Lokalise UI export step
-- One-line updates: `LOKALISE_API_TOKEN=xxx npm run snapshot`
-- Sets up infrastructure for future automation (CI runners, scheduled snapshots)
-
-**Cons:**
-- Adds API token management workflow
-- Requires `fetch-snapshot.mjs` to live in version control (though token itself is never stored)
-
-**If yes:** Commit the script from the "Proposed Script" section above and update `package.json`:
-```json
-{
-  "scripts": {
-    "snapshot": "node scripts/fetch-snapshot.mjs public/snapshots/$(date +%Y-%m-%d)_Lokalise_projects.json"
-  }
-}
-```
-
-### 2. Review Percentage Feature
+### Review Percentage Feature
 
 **Status:** Requires extended snapshot schema with per-language review counts (not yet implemented).
 
