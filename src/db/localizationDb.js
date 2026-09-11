@@ -173,7 +173,10 @@ export async function fetchAndImportMissingSnapshots() {
   syncInProgress = true
 
   try {
-    const manifestResponse = await fetch('./snapshots/manifest.json')
+    const cacheBust = `v=${Date.now()}`
+    const manifestResponse = await fetch(`./snapshots/manifest.json?${cacheBust}`, {
+      cache: 'no-store',
+    })
     if (!manifestResponse.ok) return { imported: 0 }
 
     const manifest = await manifestResponse.json()
@@ -214,7 +217,9 @@ export async function fetchAndImportMissingSnapshots() {
         if (parsed && existingDates.has(parsed.toISOString().slice(0, 10))) continue
       }
 
-      const fileResponse = await fetch(`./snapshots/${filename}`)
+      const fileResponse = await fetch(`./snapshots/${filename}?${cacheBust}`, {
+        cache: 'no-store',
+      })
       if (!fileResponse.ok) continue
       const json = await fileResponse.json()
       const importedAt = parseDateFromFilename(filename) ?? new Date()
@@ -227,4 +232,3 @@ export async function fetchAndImportMissingSnapshots() {
     syncInProgress = false
   }
 }
-
