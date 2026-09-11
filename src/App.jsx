@@ -3,10 +3,9 @@ import { DashboardOverview } from './components/DashboardOverview'
 import { fetchAndImportMissingSnapshots } from './db/localizationDb'
 
 function App() {
-  const [syncStatus, setSyncStatus] = useState(null) // null | 'syncing' | 'done' | 'error'
+  const [syncStatus, setSyncStatus] = useState('syncing') // null | 'syncing' | 'done' | 'error'
 
   useEffect(() => {
-    setSyncStatus('syncing')
     fetchAndImportMissingSnapshots()
       .then(({ imported }) => {
         setSyncStatus(imported > 0 ? 'done' : null)
