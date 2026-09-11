@@ -97,12 +97,32 @@ The token's scope should be **read-only** (statistics + translations endpoint, n
 
 ## Updating a Snapshot
 
-### Option A: Via API (Recommended)
+### Current Workflow: Manual Export
 
-Requires the `fetch-snapshot.mjs` script (see Fetching via API section below).
+1. **Export from Lokalise UI** (or automated export tool you maintain elsewhere)
+   - Save as `Lokalise_projects.json`
+
+2. **Redact and import** using a temporary script or the one below:
+   ```bash
+   # Option A: Quick redaction before committing
+   node -e "
+   const fs=require('fs');
+   const d=JSON.parse(fs.readFileSync('Lokalise_projects.json','utf-8'));
+   for(const p of d.projects??[]){
+     p.created_by_email=''; p.created_by=0; p.description='';
+   }
+   fs.writeFileSync('public/snapshots/$(date +%Y-%m-%d)_Lokalise_projects.json',
+     JSON.stringify(d,null,2),'utf-8');
+   "
+   ```
+
+3. **Update the Manifest** (see next section)
+
+### Future: Via API (Not Yet Implemented)
+
+A `scripts/fetch-snapshot.mjs` script *could* automate the export + redaction step (see "Fetching via API" section below), but it's not currently in the repo. When/if committed, the workflow would be:
 
 ```bash
-# In an interactive terminal:
 LOKALISE_API_TOKEN=<your-token> npm run snapshot
 npm run scrub
 git add public/snapshots/*.json
@@ -110,17 +130,7 @@ git commit -m "Add YYYY-MM-DD snapshot"
 git push
 ```
 
-The script:
-1. Fetches all projects from `GET /api2/projects?limit=100` (paginated)
-2. Redacts `created_by`, `created_by_email`, `description` **before writing to disk**
-3. Sorts projects by name (case-insensitive) for stable diffs
-4. Writes `public/snapshots/YYYY-MM-DD_Lokalise_projects.json`
-
-### Option B: Manual Export
-
-1. Export from Lokalise UI or via a different tool
-2. Run `scripts/fetch-snapshot.mjs` to redact and write to `public/snapshots/`
-3. Continue at "Update the Manifest" below
+The benefit: eliminates manual export step and enables one-line snapshot updates.
 
 ### Update the Manifest
 
@@ -151,11 +161,15 @@ git push origin main
 
 This triggers the GitHub Actions workflow (`.github/workflows/deploy.yml`), which builds and deploys to GitHub Pages. The new snapshot is fetched by the dashboard on next page load.
 
-## Fetching via API
+## Fetching via API (Optional Automation)
 
-### Setup
+**Status:** This script does not yet exist in the repo. Implementing it requires a decision (see Future section in this guide).
 
-Create `scripts/fetch-snapshot.mjs`:
+If implemented, it would live at `scripts/fetch-snapshot.mjs` and enable automated snapshot fetches via the Lokalise API, eliminating the manual export step.
+
+### Proposed Script
+
+Here's the reference implementation (not yet committed):
 
 ```javascript
 #!/usr/bin/env node
@@ -278,16 +292,40 @@ db.version(2).stores({
 - Token is read-only? Regenerate if you're unsure
 - Rate limit hit? Wait ~60s, Lokalise resets per-minute buckets
 
-## Future: Review Percentage Feature
+## Future Work
+
+### 1. Automated Snapshot Fetching via API
+
+**Decision needed:** Should `scripts/fetch-snapshot.mjs` be committed to the repo?
+
+**Pros:**
+- Eliminates manual Lokalise UI export step
+- One-line updates: `LOKALISE_API_TOKEN=xxx npm run snapshot`
+- Sets up infrastructure for future automation (CI runners, scheduled snapshots)
+
+**Cons:**
+- Adds API token management workflow
+- Requires `fetch-snapshot.mjs` to live in version control (though token itself is never stored)
+
+**If yes:** Commit the script from the "Proposed Script" section above and update `package.json`:
+```json
+{
+  "scripts": {
+    "snapshot": "node scripts/fetch-snapshot.mjs public/snapshots/$(date +%Y-%m-%d)_Lokalise_projects.json"
+  }
+}
+```
+
+### 2. Review Percentage Feature
 
 **Status:** Requires extended snapshot schema with per-language review counts (not yet implemented).
 
-**Details:** See [Contributing > Reviewed Translations](CONTRIBUTING.md) if that doc exists, or ask the maintainer.
-
 **Data flow when implemented:**
-1. Fetch script adds `reviewed_by_language` to each project's statistics
-2. `normalizeLokaliseProjects()` reads and stores `reviewedByLanguageIso: {...}`
+1. Fetch script adds `reviewed_by_language` to each project's statistics (see example in "Proposed Script")
+2. `normalizeLokaliseProjects()` reads and stores review counts per language
 3. Dashboard table renders "Translated / Reviewed" side-by-side
 4. Trend chart shows review % over time
 
 **Cost:** ~5–6 min per snapshot fetch (due to 1,500 per-language API requests).
+
+**Design decision pending:** Denominator for review % (reviewed ÷ all keys vs. reviewed ÷ translated keys). See memory files for context.
